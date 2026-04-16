@@ -14,6 +14,6 @@ public class AddCrimeRequest {
     private String crimeLocation;
     private String city;
     private String district;
-    private String description;
+    private String crimeDescription;
     private String crimeStatus;
 }

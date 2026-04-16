@@ -46,12 +46,12 @@ public class SuspectService {
         s.setDateOfBirth(req.getDateOfBirth());
         s.setGender(req.getGender());
         s.setNationId(req.getNationId());
-        s.setHeightCm(req.getHeightCm());
-        s.setWeightKg(req.getWeightKg());
+        s.setHeightInCm(req.getHeightInCm());
+        s.setWeightInKg(req.getWeightInKg());
         s.setEyeColor(req.getEyeColor());
         s.setHairColor(req.getHairColor());
-        s.setAddress(req.getAddress());
-        s.setStatus(req.getStatus() != null ? req.getStatus() : "Active");
+        s.setAdress(req.getAdress());
+        s.setPhone(req.getPhone());
         return suspectRepository.save(s);
     }
 }

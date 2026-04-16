@@ -18,8 +18,6 @@ export class AddSuspectComponent {
     { value: 'F', label: 'Female' }
   ];
 
-  statusOptions = ['Active', 'Wanted', 'Incarcerated', 'Released'];
-
   eyeColorOptions = ['Brown', 'Blue', 'Green', 'Gray', 'Hazel', 'Black', 'Other'];
   hairColorOptions = ['Black', 'Brown', 'Blonde', 'Red', 'Gray', 'White', 'Bald', 'Other'];
 
@@ -30,12 +28,12 @@ export class AddSuspectComponent {
       dateOfBirth: ['', Validators.required],
       gender:      ['', Validators.required],
       nationId:    ['', Validators.required],
-      heightCm:    [null],
-      weightKg:    [null],
+      heightInCm:  [null],
+      weightInKg:  [null],
       eyeColor:    [null],
       hairColor:   [null],
-      address:     [null],
-      status:      ['Active', Validators.required]
+      adress:      [null],
+      phone:       [null]
     });
   }
 
@@ -50,7 +48,7 @@ export class AddSuspectComponent {
         this.successMsg = `Suspect added successfully with ID #${s.suspectId}.`;
         this.addedSuspectId = s.suspectId;
         this.loading = false;
-        this.form.reset({ status: 'Active', gender: '' });
+        this.form.reset({ gender: '' });
       },
       error: err => {
         this.errorMsg = err.error?.message || 'Failed to add suspect.';
@@ -60,7 +58,7 @@ export class AddSuspectComponent {
   }
 
   reset(): void {
-    this.form.reset({ status: 'Active', gender: '' });
+    this.form.reset({ gender: '' });
     this.successMsg = '';
     this.errorMsg = '';
     this.addedSuspectId = null;

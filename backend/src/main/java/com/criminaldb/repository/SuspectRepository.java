@@ -13,17 +13,16 @@ public interface SuspectRepository extends JpaRepository<Suspect, Integer> {
     @Query("SELECT s FROM Suspect s WHERE " +
            "LOWER(s.firstName) LIKE LOWER(CONCAT('%', :q, '%')) OR " +
            "LOWER(s.lastName)  LIKE LOWER(CONCAT('%', :q, '%')) OR " +
-           "LOWER(s.nationId)  LIKE LOWER(CONCAT('%', :q, '%')) OR " +
-           "LOWER(s.status)    LIKE LOWER(CONCAT('%', :q, '%'))")
+           "LOWER(s.nationId)  LIKE LOWER(CONCAT('%', :q, '%'))")
     List<Suspect> search(@Param("q") String query);
 
     @Query("SELECT MAX(s.suspectId) FROM Suspect s")
     Integer findMaxSuspectId();
 
     @Query(value = """
-            SELECT s.* FROM suspect s
-            JOIN crime_suspect cs ON s.suspect_id = cs.suspect_id
-            WHERE cs.crime_id = :crimeId
+            SELECT s.* FROM Suspect s
+            JOIN SuspectCrime sc ON s.SuspectId = sc.SuspectId
+            WHERE sc.CrimeId = :crimeId
             """, nativeQuery = true)
     List<Suspect> findByCrimeId(@Param("crimeId") Integer crimeId);
 }

@@ -17,10 +17,10 @@ public interface CrimeRepository extends JpaRepository<Crime, Integer> {
     List<Crime> findByCity(String city);
 
     @Query(value = """
-            SELECT * FROM crime WHERE
-            (:type   IS NULL OR crime_type   = :type)   AND
-            (:status IS NULL OR crime_status = :status) AND
-            (:city   IS NULL OR LOWER(city) LIKE LOWER(CONCAT('%', :city, '%')))
+            SELECT * FROM Crime WHERE
+            (:type   IS NULL OR CrimeType   = :type)   AND
+            (:status IS NULL OR CrimeStatus = :status) AND
+            (:city   IS NULL OR LOWER(City) LIKE LOWER(CONCAT('%', :city, '%')))
             """, nativeQuery = true)
     List<Crime> filter(@Param("type") String type,
                        @Param("status") String status,
@@ -36,10 +36,10 @@ public interface CrimeRepository extends JpaRepository<Crime, Integer> {
     Integer findMaxCrimeId();
 
     @Query(value = """
-            SELECT c.* FROM crime c
-            JOIN crime_suspect cs ON c.crime_id = cs.crime_id
-            WHERE cs.suspect_id = :suspectId
-            ORDER BY c.crime_date DESC
+            SELECT c.* FROM Crime c
+            JOIN SuspectCrime sc ON c.CrimeId = sc.CrimeId
+            WHERE sc.SuspectId = :suspectId
+            ORDER BY c.CrimeDate DESC
             """, nativeQuery = true)
     List<Crime> findBySuspectId(@Param("suspectId") Integer suspectId);
 }

@@ -12,9 +12,9 @@ import java.io.Serializable;
 @Getter @Setter @NoArgsConstructor @EqualsAndHashCode
 public class CrimeSuspectId implements Serializable {
 
-    @Column(name = "crime_id")
+    @Column(name = "CrimeId")
     private Integer crimeId;
 
-    @Column(name = "suspect_id")
+    @Column(name = "SuspectId")
     private Integer suspectId;
 }

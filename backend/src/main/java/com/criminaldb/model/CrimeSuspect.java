@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "crime_suspect")
+@Table(name = "SuspectCrime")
 @Getter @Setter @NoArgsConstructor
 public class CrimeSuspect {
 
@@ -15,14 +15,11 @@ public class CrimeSuspect {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("crimeId")
-    @JoinColumn(name = "crime_id")
+    @JoinColumn(name = "CrimeId")
     private Crime crime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("suspectId")
-    @JoinColumn(name = "suspect_id")
+    @JoinColumn(name = "SuspectId")
     private Suspect suspect;
-
-    @Column(name = "suspect_role", length = 50)
-    private String suspectRole;
 }

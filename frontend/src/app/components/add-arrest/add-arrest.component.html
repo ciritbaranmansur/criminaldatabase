@@ -1,17 +1,16 @@
 <div class="page-header">
   <h1><i class="bi bi-plus-circle-fill me-2 text-info"></i>Feature 4 — Add New Arrest</h1>
-  <p>Record a new arrest of a suspect for a specific crime</p>
+  <p>Record a new arrest for a specific crime</p>
 </div>
 
 <div class="content-body">
-  <!-- SQL Reference -->
   <div class="alert alert-light border mb-3" style="font-size:0.8rem">
     <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
-    <code class="ms-2">INSERT INTO arrest (arrest_id, crime_id, suspect_id, arresting_officer_id, arrest_date, arrest_location) VALUES (...)</code>
+    <code class="ms-2">INSERT INTO Arrest (...) VALUES (...); INSERT INTO OfficerArrest ...; INSERT INTO SuspectArrest ...</code>
   </div>
 
   <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-8">
       <div class="feature-card">
         <h5><i class="bi bi-file-earmark-plus me-2"></i>New Arrest Form</h5>
 
@@ -24,12 +23,23 @@
 
         <form [formGroup]="form" (ngSubmit)="submit()">
           <div class="row g-3">
-            <div class="col-md-6">
+
+            <div class="col-12">
               <label class="form-label fw-semibold">Crime *</label>
               <select class="form-select" formControlName="crimeId">
                 <option value="">— Select Crime —</option>
                 <option *ngFor="let c of crimes" [value]="c.crimeId">
                   #{{ c.crimeId }} — {{ c.crimeType }} ({{ c.city }})
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Arresting Officer *</label>
+              <select class="form-select" formControlName="officerId">
+                <option value="">— Select Officer —</option>
+                <option *ngFor="let o of officers" [value]="o.officerId">
+                  #{{ o.officerId }} — {{ o.officerName }} ({{ o.officerRank }})
                 </option>
               </select>
             </div>
@@ -45,16 +55,6 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Arresting Officer *</label>
-              <select class="form-select" formControlName="arrestingOfficerId">
-                <option value="">— Select Officer —</option>
-                <option *ngFor="let o of officers" [value]="o.officerId">
-                  {{ o.firstName }} {{ o.lastName }} ({{ o.badgeNumber }})
-                </option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
               <label class="form-label fw-semibold">Arrest Date *</label>
               <input type="date" class="form-control" formControlName="arrestDate">
             </div>
@@ -62,8 +62,9 @@
             <div class="col-12">
               <label class="form-label fw-semibold">Arrest Location *</label>
               <input type="text" class="form-control" formControlName="arrestLocation"
-                     placeholder="e.g. 123 Main Street, New York">
+                     placeholder="e.g. Chicago PD Downtown Station">
             </div>
+
           </div>
 
           <div class="mt-3">

@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "crime_officer")
+@Table(name = "Crime_Officer")
 @Getter @Setter @NoArgsConstructor
 public class CrimeOfficer {
 
@@ -16,17 +15,11 @@ public class CrimeOfficer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("crimeId")
-    @JoinColumn(name = "crime_id")
+    @JoinColumn(name = "CrimeId")
     private Crime crime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("officerId")
-    @JoinColumn(name = "officer_id")
+    @JoinColumn(name = "OfficerId")
     private Officer officer;
-
-    @Column(name = "role", length = 50)
-    private String role;
-
-    @Column(name = "assigned_date")
-    private LocalDate assignedDate;
 }

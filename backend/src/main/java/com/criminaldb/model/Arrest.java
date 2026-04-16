@@ -7,26 +7,20 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "arrest")
+@Table(name = "Arrest")
 @Getter @Setter @NoArgsConstructor
 public class Arrest {
 
     @Id
-    @Column(name = "arrest_id")
+    @Column(name = "ArrestId")
     private Integer arrestId;
 
-    @Column(name = "crime_id")
-    private Integer crimeId;
-
-    @Column(name = "suspect_id")
-    private Integer suspectId;
-
-    @Column(name = "arresting_officer_id")
-    private Integer arrestingOfficerId;
-
-    @Column(name = "arrest_date")
+    @Column(name = "ArrestDate")
     private LocalDate arrestDate;
 
-    @Column(name = "arrest_location", length = 200)
+    @Column(name = "ArrestLocation")
     private String arrestLocation;
+
+    @Column(name = "CrimeId")
+    private Integer crimeId;
 }

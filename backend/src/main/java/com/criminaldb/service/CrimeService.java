@@ -50,8 +50,8 @@ public class CrimeService {
         c.setCrimeLocation(req.getCrimeLocation());
         c.setCity(req.getCity());
         c.setDistrict(req.getDistrict());
-        c.setDescription(req.getDescription());
-        c.setCrimeStatus(req.getCrimeStatus() != null ? req.getCrimeStatus() : "Open");
+        c.setCrimeDescription(req.getCrimeDescription());
+        c.setCrimeStatus(req.getCrimeStatus() != null ? req.getCrimeStatus() : "Under Investigation");
         return crimeRepository.save(c);
     }
 }

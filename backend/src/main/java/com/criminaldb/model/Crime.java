@@ -8,35 +8,35 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "crime")
+@Table(name = "Crime")
 @Getter @Setter @NoArgsConstructor
 public class Crime {
 
     @Id
-    @Column(name = "crime_id")
+    @Column(name = "CrimeId")
     private Integer crimeId;
 
-    @Column(name = "crime_type", length = 50)
+    @Column(name = "CrimeType")
     private String crimeType;
 
-    @Column(name = "crime_date")
+    @Column(name = "CrimeDate")
     private LocalDate crimeDate;
 
-    @Column(name = "crime_time")
+    @Column(name = "CrimeTime")
     private LocalTime crimeTime;
 
-    @Column(name = "crime_location", length = 200)
+    @Column(name = "CrimeLocation")
     private String crimeLocation;
 
-    @Column(name = "city", length = 100)
+    @Column(name = "City")
     private String city;
 
-    @Column(name = "district", length = 100)
+    @Column(name = "District")
     private String district;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
+    @Column(name = "CrimeDescription", columnDefinition = "TEXT")
+    private String crimeDescription;
 
-    @Column(name = "crime_status", length = 30)
+    @Column(name = "CrimeStatus")
     private String crimeStatus;
 }

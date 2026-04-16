@@ -4,20 +4,18 @@
 </div>
 
 <div class="content-body">
-  <!-- SQL Query Reference -->
   <div class="alert alert-light border mb-3" style="font-size:0.8rem">
     <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
-    <code class="ms-2">SELECT sn.*, s.*, c.* FROM sentence sn JOIN crime c ON ... JOIN suspect s ON ... WHERE sn.hearing_date = :date</code>
+    <code class="ms-2">SELECT ci.*, s.*, c.* FROM CourtInformation ci JOIN Crime c ON ... JOIN SuspectCrime sc ON ... JOIN Suspect s ON ... WHERE ci.HearingDate = :date</code>
   </div>
 
-  <!-- Date Picker Form -->
   <div class="feature-card mb-3">
     <h5><i class="bi bi-calendar3 me-2"></i>Select Hearing Date</h5>
     <div class="row g-2 align-items-end">
       <div class="col-md-4">
         <label class="form-label">Hearing Date</label>
         <input type="date" class="form-control" [(ngModel)]="selectedDate">
-        <div class="form-text">Try: 2024-07-15, 2025-01-10, 2025-04-05, 2025-08-01</div>
+        <div class="form-text">Sample dates: 2025-01-15, 2025-02-10, 2025-03-05, 2024-04-10</div>
       </div>
       <div class="col-auto">
         <button class="btn btn-primary" (click)="search()" [disabled]="!selectedDate || loading">
@@ -31,7 +29,6 @@
 
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-  <!-- Results -->
   <div class="table-card" *ngIf="searched">
     <div class="table-card-header">
       <h5>
@@ -59,7 +56,7 @@
             <th>City</th>
             <th>Description</th>
             <th>Verdict</th>
-            <th>Sentence Type</th>
+            <th>Sentence Length</th>
           </tr>
         </thead>
         <tbody>
@@ -71,9 +68,9 @@
             <td>{{ r.crimeType }}</td>
             <td>{{ r.crimeDate }}</td>
             <td>{{ r.city }}</td>
-            <td><small>{{ r.description || '—' }}</small></td>
+            <td><small>{{ r.crimeDescription || '—' }}</small></td>
             <td><span [ngClass]="getVerdictClass(r.verdict)">{{ r.verdict || 'Pending' }}</span></td>
-            <td>{{ r.sentenceType || '—' }}</td>
+            <td>{{ r.sentenceLenght || '—' }}</td>
           </tr>
         </tbody>
       </table>

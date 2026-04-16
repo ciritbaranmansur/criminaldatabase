@@ -3,8 +3,6 @@ package com.criminaldb.controller;
 import com.criminaldb.dto.AddOfficerRequest;
 import com.criminaldb.dto.OfficerArrestStatsDTO;
 import com.criminaldb.model.Officer;
-import com.criminaldb.model.OfficerRank;
-import com.criminaldb.model.Unit;
 import com.criminaldb.service.OfficerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,16 +26,6 @@ public class OfficerController {
     @GetMapping("/{id}")
     public ResponseEntity<Officer> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(officerService.getById(id));
-    }
-
-    @GetMapping("/ranks")
-    public List<OfficerRank> getRanks() {
-        return officerService.getAllRanks();
-    }
-
-    @GetMapping("/units")
-    public List<Unit> getUnits() {
-        return officerService.getAllUnits();
     }
 
     @PostMapping

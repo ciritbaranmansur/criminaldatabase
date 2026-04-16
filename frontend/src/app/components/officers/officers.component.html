@@ -19,28 +19,20 @@
         <thead>
           <tr>
             <th>ID</th>
-            <th>Badge #</th>
             <th>Name</th>
             <th>Rank</th>
             <th>Unit</th>
-            <th>Phone</th>
-            <th>Email</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let o of officers">
             <td><span class="badge bg-primary">{{ o.officerId }}</span></td>
-            <td><code>{{ o.badgeNumber }}</code></td>
-            <td><strong>{{ o.firstName }} {{ o.lastName }}</strong></td>
-            <td>
-              <span class="badge bg-info">{{ o.rank.rankName }}</span>
-            </td>
-            <td>{{ o.unit.unitName }}</td>
-            <td>{{ o.phone || '—' }}</td>
-            <td>{{ o.email || '—' }}</td>
+            <td><strong>{{ o.officerName }}</strong></td>
+            <td><span class="badge bg-info">{{ o.officerRank }}</span></td>
+            <td>{{ o.officerUnit }}</td>
           </tr>
           <tr *ngIf="officers.length === 0">
-            <td colspan="7" class="text-center text-muted py-4">No officers found.</td>
+            <td colspan="4" class="text-center text-muted py-4">No officers found.</td>
           </tr>
         </tbody>
       </table>

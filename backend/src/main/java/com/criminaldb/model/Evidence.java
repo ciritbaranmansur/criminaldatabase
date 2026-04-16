@@ -6,20 +6,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "evidence")
+@Table(name = "Evidence")
 @Getter @Setter @NoArgsConstructor
 public class Evidence {
 
     @Id
-    @Column(name = "evidence_id")
+    @Column(name = "EvidenceId")
     private Integer evidenceId;
 
-    @Column(name = "crime_id")
+    @Column(name = "CrimeId")
     private Integer crimeId;
 
-    @Column(name = "evidence_type", length = 50)
+    @Column(name = "EvidenceType")
     private String evidenceType;
 
-    @Column(name = "evidence_description", columnDefinition = "TEXT")
+    @Column(name = "EvidenceDescription", columnDefinition = "TEXT")
     private String evidenceDescription;
 }

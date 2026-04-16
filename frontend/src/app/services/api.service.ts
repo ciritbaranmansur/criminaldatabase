@@ -5,8 +5,7 @@ import { environment } from '../../environments/environment';
 import {
   Suspect, Officer, Crime, Arrest,
   CourtHearingDTO, OfficerArrestStatsDTO,
-  AddArrestRequest, AddSuspectRequest, AddCrimeRequest, DashboardStats,
-  OfficerRank, Unit
+  AddArrestRequest, AddSuspectRequest, AddCrimeRequest, DashboardStats
 } from '../models/models';
 
 @Injectable({ providedIn: 'root' })
@@ -68,14 +67,6 @@ export class ApiService {
 
   getOfficerById(id: number): Observable<Officer> {
     return this.http.get<Officer>(`${this.api}/officers/${id}`);
-  }
-
-  getOfficerRanks(): Observable<OfficerRank[]> {
-    return this.http.get<OfficerRank[]>(`${this.api}/officers/ranks`);
-  }
-
-  getOfficerUnits(): Observable<Unit[]> {
-    return this.http.get<Unit[]>(`${this.api}/officers/units`);
   }
 
   addOfficer(request: any): Observable<Officer> {

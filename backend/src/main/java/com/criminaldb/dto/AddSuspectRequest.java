@@ -12,10 +12,10 @@ public class AddSuspectRequest {
     private LocalDate dateOfBirth;
     private String gender;
     private String nationId;
-    private Integer heightCm;
-    private Integer weightKg;
+    private Double heightInCm;
+    private Double weightInKg;
     private String eyeColor;
     private String hairColor;
-    private String address;
-    private String status;
+    private String adress;
+    private String phone;
 }

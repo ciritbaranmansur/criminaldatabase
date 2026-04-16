@@ -3,7 +3,6 @@ package com.criminaldb.service;
 import com.criminaldb.dto.AddArrestRequest;
 import com.criminaldb.model.Arrest;
 import com.criminaldb.repository.ArrestRepository;
-import com.criminaldb.repository.CrimeSuspectRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -12,11 +11,9 @@ import java.util.List;
 public class ArrestService {
 
     private final ArrestRepository arrestRepository;
-    private final CrimeSuspectRepository crimeSuspectRepository;
 
-    public ArrestService(ArrestRepository arrestRepository, CrimeSuspectRepository crimeSuspectRepository) {
+    public ArrestService(ArrestRepository arrestRepository) {
         this.arrestRepository = arrestRepository;
-        this.crimeSuspectRepository = crimeSuspectRepository;
     }
 
     public List<Arrest> getAll() {
@@ -24,8 +21,8 @@ public class ArrestService {
     }
 
     /**
-     * Query 4: Add a new arrest of a suspect.
-     * Also ensures a crime_suspect link exists so the suspect appears on the crime detail page.
+     * Query 4: Add a new arrest record.
+     * Also links the officer and suspect via OfficerArrest / SuspectArrest junction tables.
      */
     @Transactional
     public Arrest addArrest(AddArrestRequest req) {
@@ -35,16 +32,18 @@ public class ArrestService {
         Arrest arrest = new Arrest();
         arrest.setArrestId(newId);
         arrest.setCrimeId(req.getCrimeId());
-        arrest.setSuspectId(req.getSuspectId());
-        arrest.setArrestingOfficerId(req.getArrestingOfficerId());
         arrest.setArrestDate(req.getArrestDate());
         arrest.setArrestLocation(req.getArrestLocation());
 
-        arrestRepository.save(arrest);
+        Arrest saved = arrestRepository.save(arrest);
 
-        // Ensure the suspect is linked to the crime in crime_suspect
-        crimeSuspectRepository.linkSuspectToCrime(req.getCrimeId(), req.getSuspectId());
+        if (req.getOfficerId() != null) {
+            arrestRepository.insertOfficerArrest(req.getOfficerId(), saved.getArrestId());
+        }
+        if (req.getSuspectId() != null) {
+            arrestRepository.insertSuspectArrest(saved.getArrestId(), req.getSuspectId());
+        }
 
-        return arrest;
+        return saved;
     }
 }

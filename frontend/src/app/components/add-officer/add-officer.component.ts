@@ -1,37 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { OfficerRank, Unit } from '../../models/models';
 
 @Component({
   selector: 'app-add-officer',
   templateUrl: './add-officer.component.html'
 })
-export class AddOfficerComponent implements OnInit {
+export class AddOfficerComponent {
   form: FormGroup;
   loading = false;
   successMsg = '';
   errorMsg = '';
   addedOfficerId: number | null = null;
 
-  ranks: OfficerRank[] = [];
-  units: Unit[] = [];
-
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.form = this.fb.group({
-      firstName:   ['', Validators.required],
-      lastName:    ['', Validators.required],
-      badgeNumber: ['', Validators.required],
-      rankId:      ['', Validators.required],
-      unitId:      ['', Validators.required],
-      phone:       [null],
-      email:       [null]
+      officerName: ['', Validators.required],
+      officerRank: ['', Validators.required],
+      officerUnit: ['', Validators.required]
     });
-  }
-
-  ngOnInit(): void {
-    this.api.getOfficerRanks().subscribe(d => this.ranks = d);
-    this.api.getOfficerUnits().subscribe(d => this.units = d);
   }
 
   submit(): void {
@@ -48,7 +35,7 @@ export class AddOfficerComponent implements OnInit {
         this.form.reset();
       },
       error: err => {
-        this.errorMsg = err.error?.message || 'Failed to add officer. Badge number may already exist.';
+        this.errorMsg = err.error?.message || 'Failed to add officer.';
         this.loading = false;
       }
     });

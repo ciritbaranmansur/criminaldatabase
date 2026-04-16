@@ -2,16 +2,6 @@
 // TypeScript interfaces matching the Spring Boot backend models
 // ============================================================
 
-export interface OfficerRank {
-  rankId: number;
-  rankName: string;
-}
-
-export interface Unit {
-  unitId: number;
-  unitName: string;
-}
-
 export interface Suspect {
   suspectId: number;
   firstName: string;
@@ -19,23 +9,19 @@ export interface Suspect {
   dateOfBirth: string;
   gender: string;
   nationId: string;
-  heightCm: number | null;
-  weightKg: number | null;
+  heightInCm: number | null;
+  weightInKg: number | null;
   eyeColor: string | null;
   hairColor: string | null;
-  address: string | null;
-  status: string;
+  adress: string | null;
+  phone: string | null;
 }
 
 export interface Officer {
   officerId: number;
-  firstName: string;
-  lastName: string;
-  badgeNumber: string;
-  rank: OfficerRank;
-  unit: Unit;
-  phone: string | null;
-  email: string | null;
+  officerRank: string;
+  officerName: string;
+  officerUnit: string;
 }
 
 export interface Crime {
@@ -46,15 +32,13 @@ export interface Crime {
   crimeLocation: string;
   city: string;
   district: string | null;
-  description: string | null;
+  crimeDescription: string | null;
   crimeStatus: string;
 }
 
 export interface Arrest {
   arrestId: number;
   crimeId: number;
-  suspectId: number;
-  arrestingOfficerId: number;
   arrestDate: string;
   arrestLocation: string | null;
 }
@@ -71,9 +55,9 @@ export interface CourtHearingDTO {
   crimeType: string;
   crimeDate: string;
   city: string;
-  description: string | null;
+  crimeDescription: string | null;
   verdict: string | null;
-  sentenceType: string | null;
+  sentenceLenght: string | null;
 }
 
 // DTO for Query 2
@@ -89,8 +73,6 @@ export interface OfficerArrestStatsDTO {
 // Request for Query 4
 export interface AddArrestRequest {
   crimeId: number;
-  suspectId: number;
-  arrestingOfficerId: number;
   arrestDate: string;
   arrestLocation: string;
 }
@@ -102,12 +84,12 @@ export interface AddSuspectRequest {
   dateOfBirth: string;
   gender: string;
   nationId: string;
-  heightCm: number | null;
-  weightKg: number | null;
+  heightInCm: number | null;
+  weightInKg: number | null;
   eyeColor: string | null;
   hairColor: string | null;
-  address: string | null;
-  status: string;
+  adress: string | null;
+  phone: string | null;
 }
 
 // Request for adding a crime
@@ -118,7 +100,7 @@ export interface AddCrimeRequest {
   crimeLocation: string;
   city: string;
   district: string | null;
-  description: string | null;
+  crimeDescription: string | null;
   crimeStatus: string;
 }
 

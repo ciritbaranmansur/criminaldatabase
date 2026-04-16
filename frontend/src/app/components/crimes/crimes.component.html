@@ -68,7 +68,7 @@
             <td>{{ c.crimeDate }}<br><small class="text-muted">{{ c.crimeTime }}</small></td>
             <td>{{ c.crimeLocation }}</td>
             <td>{{ c.city }}<br><small class="text-muted">{{ c.district || '' }}</small></td>
-            <td><small>{{ c.description || '—' }}</small></td>
+            <td><small>{{ c.crimeDescription || '—' }}</small></td>
             <td>
               <span class="badge" [ngClass]="getStatusClass(c.crimeStatus)">{{ c.crimeStatus }}</span>
             </td>

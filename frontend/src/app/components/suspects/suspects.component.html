@@ -4,11 +4,10 @@
 </div>
 
 <div class="content-body">
-  <!-- Search Bar -->
   <div class="feature-card mb-3">
     <div class="input-group">
       <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="form-control" placeholder="Search by name, nationality, or status..."
+      <input type="text" class="form-control" placeholder="Search by name or nationality..."
              [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
       <button class="btn btn-primary" (click)="onSearch()">Search</button>
       <button class="btn btn-outline-secondary" (click)="clearSearch()" *ngIf="searchQuery">
@@ -38,7 +37,7 @@
             <th>Nationality ID</th>
             <th>Height / Weight</th>
             <th>Eye / Hair</th>
-            <th>Status</th>
+            <th>Phone</th>
           </tr>
         </thead>
         <tbody>
@@ -46,22 +45,14 @@
             <td><span class="badge bg-secondary">{{ s.suspectId }}</span></td>
             <td>
               <strong>{{ s.firstName }} {{ s.lastName }}</strong>
-              <br><small class="text-muted">{{ s.address }}</small>
+              <br><small class="text-muted">{{ s.adress }}</small>
             </td>
             <td>{{ s.dateOfBirth }}</td>
-            <td>{{ getGenderLabel(s.gender) }}</td>
+            <td>{{ s.gender === 'M' ? 'Male' : 'Female' }}</td>
             <td><code>{{ s.nationId }}</code></td>
-            <td>{{ s.heightCm || '—' }} cm / {{ s.weightKg || '—' }} kg</td>
+            <td>{{ s.heightInCm || '—' }} cm / {{ s.weightInKg || '—' }} kg</td>
             <td>{{ s.eyeColor || '—' }} / {{ s.hairColor || '—' }}</td>
-            <td>
-              <span class="badge"
-                [class.bg-info]="s.status === 'Active'"
-                [class.bg-secondary]="s.status === 'Released'"
-                [class.bg-danger]="s.status === 'Wanted'"
-                [style.background-color]="s.status === 'Incarcerated' ? '#6f42c1' : ''">
-                {{ s.status }}
-              </span>
-            </td>
+            <td>{{ s.phone || '—' }}</td>
           </tr>
           <tr *ngIf="suspects.length === 0">
             <td colspan="8" class="text-center text-muted py-4">No suspects found.</td>

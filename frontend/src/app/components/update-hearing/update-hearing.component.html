@@ -7,7 +7,7 @@
   <!-- SQL Reference -->
   <div class="alert alert-light border mb-3" style="font-size:0.8rem">
     <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
-    <code class="ms-2">UPDATE sentence SET hearing_date = :date WHERE court_case_no = :caseNo</code>
+    <code class="ms-2">UPDATE CourtInformation SET HearingDate = :date WHERE CourtCaseNo = :caseNo</code>
   </div>
 
   <div class="row">
@@ -27,7 +27,7 @@
             <label class="form-label fw-semibold">Court Case Number</label>
             <input type="number" class="form-control" formControlName="caseNo"
                    placeholder="e.g. 1008">
-            <div class="form-text">Cases range from 1001 to 1032. Try: 1002, 1008, 1010, 1016</div>
+            <div class="form-text">Cases range from 2001 to 2020. Try: 2001, 2008, 2011, 2015</div>
             <div class="invalid-feedback d-block"
                  *ngIf="form.get('caseNo')?.invalid && form.get('caseNo')?.touched">
               Please enter a valid case number.
@@ -58,16 +58,16 @@
         <h5><i class="bi bi-info-circle me-2 text-info"></i>How It Works</h5>
         <p class="text-muted" style="font-size:0.9rem">
           Enter the court case number and a new hearing date. The system will update the
-          <code>hearing_date</code> field in the <code>sentence</code> table for that specific case.
+          <code>HearingDate</code> field in the <code>CourtInformation</code> table for that specific case.
         </p>
         <hr>
-        <p class="fw-semibold mb-1">Sample Case Numbers (Pending):</p>
+        <p class="fw-semibold mb-1">Sample Case Numbers:</p>
         <ul style="font-size:0.875rem">
-          <li><strong>1002</strong> — Identity Fraud, Suspect: Sarah Connor</li>
-          <li><strong>1008</strong> — Harbor Murder, Suspect: Omar Hassan</li>
-          <li><strong>1010</strong> — Drug Raid, Suspect: Carlos Mendoza</li>
-          <li><strong>1016</strong> — Riverside Murder, Suspect: Viktor Kozlov</li>
-          <li><strong>1022</strong> — Ransomware, Suspect: David Brown</li>
+          <li><strong>2001</strong> — Theft (Chicago), HearingDate: 2024-04-10</li>
+          <li><strong>2008</strong> — Drug Trafficking (Atlanta), HearingDate: 2025-01-15</li>
+          <li><strong>2011</strong> — Fraud (Portland), HearingDate: 2025-03-05</li>
+          <li><strong>2015</strong> — Assault (Denver), HearingDate: 2025-01-10</li>
+          <li><strong>2019</strong> — Robbery (Las Vegas), HearingDate: 2025-05-15</li>
         </ul>
       </div>
     </div>

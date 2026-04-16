@@ -22,13 +22,6 @@
         </div>
         <div>
           <h4 class="mb-0">{{ suspect.firstName }} {{ suspect.lastName }}</h4>
-          <span class="badge mt-1"
-            [class.bg-info]="suspect.status === 'Active'"
-            [class.bg-secondary]="suspect.status === 'Released'"
-            [class.bg-danger]="suspect.status === 'Wanted'"
-            [style.background-color]="suspect.status === 'Incarcerated' ? '#6f42c1' : ''">
-            {{ suspect.status }}
-          </span>
         </div>
       </div>
       <div class="row g-3">
@@ -50,15 +43,19 @@
         </div>
         <div class="col-md-4">
           <small class="text-muted d-block">Height / Weight</small>
-          <strong>{{ suspect.heightCm || '—' }} cm / {{ suspect.weightKg || '—' }} kg</strong>
+          <strong>{{ suspect.heightInCm || '—' }} cm / {{ suspect.weightInKg || '—' }} kg</strong>
         </div>
         <div class="col-md-4">
           <small class="text-muted d-block">Eye / Hair Color</small>
           <strong>{{ suspect.eyeColor || '—' }} / {{ suspect.hairColor || '—' }}</strong>
         </div>
-        <div class="col-12" *ngIf="suspect.address">
+        <div class="col-md-4" *ngIf="suspect.phone">
+          <small class="text-muted d-block">Phone</small>
+          <strong>{{ suspect.phone }}</strong>
+        </div>
+        <div class="col-12" *ngIf="suspect.adress">
           <small class="text-muted d-block">Address</small>
-          <strong>{{ suspect.address }}</strong>
+          <strong>{{ suspect.adress }}</strong>
         </div>
       </div>
     </div>

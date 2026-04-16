@@ -19,6 +19,6 @@ public interface CrimeSuspectRepository extends JpaRepository<CrimeSuspect, Crim
     int removeSuspectFromCrime(@Param("crimeId") Integer crimeId, @Param("suspectId") Integer suspectId);
 
     @Modifying
-    @Query(value = "INSERT IGNORE INTO crime_suspect (crime_id, suspect_id) VALUES (:crimeId, :suspectId)", nativeQuery = true)
+    @Query(value = "INSERT IGNORE INTO SuspectCrime (SuspectId, CrimeId) VALUES (:suspectId, :crimeId)", nativeQuery = true)
     void linkSuspectToCrime(@Param("crimeId") Integer crimeId, @Param("suspectId") Integer suspectId);
 }

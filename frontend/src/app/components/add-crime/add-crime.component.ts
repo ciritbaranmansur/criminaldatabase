@@ -23,14 +23,14 @@ export class AddCrimeComponent {
 
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.form = this.fb.group({
-      crimeType:     ['', Validators.required],
-      crimeDate:     ['', Validators.required],
-      crimeTime:     ['00:00', Validators.required],
-      crimeLocation: ['', Validators.required],
-      city:          ['', Validators.required],
-      district:      [null],
-      description:   [null],
-      crimeStatus:   ['Open', Validators.required]
+      crimeType:        ['', Validators.required],
+      crimeDate:        ['', Validators.required],
+      crimeTime:        ['00:00', Validators.required],
+      crimeLocation:    ['', Validators.required],
+      city:             ['', Validators.required],
+      district:         [null],
+      crimeDescription: [null],
+      crimeStatus:      ['Under Investigation', Validators.required]
     });
   }
 
@@ -45,7 +45,7 @@ export class AddCrimeComponent {
         this.successMsg = `Crime added successfully with ID #${c.crimeId}.`;
         this.addedCrimeId = c.crimeId;
         this.loading = false;
-        this.form.reset({ crimeStatus: 'Open', crimeTime: '00:00' });
+        this.form.reset({ crimeStatus: 'Under Investigation', crimeTime: '00:00' });
       },
       error: err => {
         this.errorMsg = err.error?.message || 'Failed to add crime.';
@@ -55,7 +55,7 @@ export class AddCrimeComponent {
   }
 
   reset(): void {
-    this.form.reset({ crimeStatus: 'Open', crimeTime: '00:00' });
+    this.form.reset({ crimeStatus: 'Under Investigation', crimeTime: '00:00' });
     this.successMsg = '';
     this.errorMsg = '';
     this.addedCrimeId = null;

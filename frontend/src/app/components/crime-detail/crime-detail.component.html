@@ -50,9 +50,9 @@
           <small class="text-muted d-block">District</small>
           <strong>{{ crime.district }}</strong>
         </div>
-        <div class="col-12" *ngIf="crime.description">
+        <div class="col-12" *ngIf="crime.crimeDescription">
           <small class="text-muted d-block">Description</small>
-          <p class="mb-0">{{ crime.description }}</p>
+          <p class="mb-0">{{ crime.crimeDescription }}</p>
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
               <th>Name</th>
               <th>Gender</th>
               <th>Nationality ID</th>
-              <th>Status</th>
+              <th>Phone</th>
             </tr>
           </thead>
           <tbody>
@@ -78,19 +78,11 @@
               <td><span class="badge bg-secondary">{{ s.suspectId }}</span></td>
               <td>
                 <strong>{{ s.firstName }} {{ s.lastName }}</strong>
-                <br><small class="text-muted">{{ s.address || '' }}</small>
+                <br><small class="text-muted">{{ s.adress || '' }}</small>
               </td>
               <td>{{ getGenderLabel(s.gender) }}</td>
               <td><code>{{ s.nationId }}</code></td>
-              <td>
-                <span class="badge"
-                  [class.bg-info]="s.status === 'Active'"
-                  [class.bg-secondary]="s.status === 'Released'"
-                  [class.bg-danger]="s.status === 'Wanted'"
-                  [style.background-color]="s.status === 'Incarcerated' ? '#6f42c1' : ''">
-                  {{ s.status }}
-                </span>
-              </td>
+              <td>{{ s.phone || '—' }}</td>
             </tr>
             <tr *ngIf="suspects.length === 0">
               <td colspan="5" class="text-center text-muted py-4">No suspects linked to this crime.</td>

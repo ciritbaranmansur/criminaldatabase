@@ -7,44 +7,44 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "suspect")
+@Table(name = "Suspect")
 @Getter @Setter @NoArgsConstructor
 public class Suspect {
 
     @Id
-    @Column(name = "suspect_id")
+    @Column(name = "SuspectId")
     private Integer suspectId;
 
-    @Column(name = "first_name", nullable = false, length = 50)
+    @Column(name = "FirstName")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false, length = 50)
+    @Column(name = "LastName")
     private String lastName;
 
-    @Column(name = "date_of_birth")
+    @Column(name = "DateOfBirth")
     private LocalDate dateOfBirth;
 
-    @Column(name = "gender", length = 1)
+    @Column(name = "Gender", length = 1)
     private String gender;
 
-    @Column(name = "nation_id", length = 20)
+    @Column(name = "NationId")
     private String nationId;
 
-    @Column(name = "height_cm")
-    private Integer heightCm;
+    @Column(name = "HeightInCm")
+    private Double heightInCm;
 
-    @Column(name = "weight_kg")
-    private Integer weightKg;
+    @Column(name = "WeightInKg")
+    private Double weightInKg;
 
-    @Column(name = "eye_color", length = 20)
+    @Column(name = "EyeColor")
     private String eyeColor;
 
-    @Column(name = "hair_color", length = 20)
+    @Column(name = "HairColor")
     private String hairColor;
 
-    @Column(name = "address", length = 200)
-    private String address;
+    @Column(name = "Adress")
+    private String adress;
 
-    @Column(name = "status", length = 20)
-    private String status;
+    @Column(name = "Phone")
+    private String phone;
 }
