@@ -1,0 +1,19 @@
+# Node / Angular
+node_modules/
+dist/
+.angular/
+*.log
+
+# Java / Spring Boot / Maven
+target/
+*.class
+.mvn/
+.idea/
+*.iml
+
+# IDE
+.vscode/
+.DS_Store
+
+# Env
+*.env

@@ -1,0 +1,181 @@
+========================================================
+  CRIMINAL DATABASE - PROJE CALISTIRMA REHBERI
+  CSE 204 - Akdeniz University Spring 2026
+========================================================
+
+Bu proje 3 parcadan olusuyor:
+  1. MySQL veritabani
+  2. Spring Boot backend (Java)
+  3. Angular frontend (Node.js)
+
+
+--------------------------------------------------------
+ADIM 0 - GEREKLI PROGRAMLAR
+--------------------------------------------------------
+
+Asagidaki programlarin bilgisayarinda kurulu olmasi lazim:
+
+  [1] Java 17 veya uzeri
+      https://www.oracle.com/java/technologies/downloads/
+      Kontrol: cmd'de  "java -version"  yaz
+
+  [2] Apache Maven 3.8+
+      https://maven.apache.org/download.cgi
+      Kontrol: cmd'de  "mvn -version"  yaz
+
+  [3] Node.js 18 veya uzeri (npm de beraber gelir)
+      https://nodejs.org/
+      Kontrol: cmd'de  "node -v"  yaz
+
+  [4] Angular CLI 17
+      Kurulum (bir kez yeter):
+        npm install -g @angular/cli@17
+      Kontrol: "ng version"
+
+  [5] MySQL Server 8.0
+      https://dev.mysql.com/downloads/mysql/
+      Kurulum sirasinda root sifreni not al!
+
+
+--------------------------------------------------------
+ADIM 1 - VERITABANINI YUKLE
+--------------------------------------------------------
+
+1. MySQL'e gir (cmd'yi yonetici olarak ac):
+
+   "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p
+
+   (Sifre soruldugunda MySQL root sifrenizi girin)
+
+2. Veritabanini olustur:
+
+   CREATE DATABASE IF NOT EXISTS criminal_db;
+   EXIT;
+
+3. SQL dosyasini yukle (asagidaki komutu tek satirda yaz,
+   klasor yolunu kendi bilgisayarina gore duzenle):
+
+   "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -u root -p criminal_db < "PROJE_KLASORU\database\criminal_database_final.sql"
+
+   Not: PROJE_KLASORU yerine klasorun tam yolunu yaz.
+   Ornek: C:\Users\AhmetAli\Desktop\criminal-db-project
+
+   Hata alirsan once veritabanini temizleyip tekrar dene:
+     mysql -u root -p
+     DROP DATABASE IF EXISTS criminal_db;
+     CREATE DATABASE criminal_db;
+     EXIT;
+   Sonra yukle komutunu tekrar calistir.
+
+
+--------------------------------------------------------
+ADIM 2 - BACKEND AYARLARINI DUZENLE
+--------------------------------------------------------
+
+Asagidaki dosyayi bir metin editoru ile ac:
+
+  backend\src\main\resources\application.properties
+
+Bu satiri bul:
+
+  spring.datasource.password=root1234
+
+"root1234" yerine kendi MySQL root sifrenizi yaz ve kaydet.
+Kullanici adi root degilse "username" satirini da degistir.
+
+
+--------------------------------------------------------
+ADIM 3 - BACKEND'I CALISTIR
+--------------------------------------------------------
+
+Bir cmd (komut istemi) ac ve su komutu calistir:
+
+  cd PROJE_KLASORU\backend
+  mvn spring-boot:run
+
+"Started CriminalDatabaseApplication" gibi bir yazi gorursen
+backend basariyla calisiyor demektir.
+Backend http://localhost:8080 adresinde dinliyor olacak.
+
+Bu cmd penceresini KAPAMA - backend burada calismaya devam ediyor.
+
+
+--------------------------------------------------------
+ADIM 4 - FRONTEND BAGIMLIKLARINI YUKLE
+--------------------------------------------------------
+
+Yeni bir cmd ac (backend penceresi acik kalsin) ve:
+
+  cd PROJE_KLASORU\frontend
+  npm install
+
+Bu islem internet baglantisinizla birka dakika surebilir.
+Tamamlaninca "added XXXX packages" gibi bir yazi goreceksin.
+
+
+--------------------------------------------------------
+ADIM 5 - FRONTEND'I CALISTIR
+--------------------------------------------------------
+
+Ayni frontend cmd penceresinde:
+
+  ng serve
+
+"Application bundle generation complete" ve
+"Local: http://localhost:4200" yazisini gordugunde hazir.
+
+Bu cmd penceresini de KAPAMA.
+
+
+--------------------------------------------------------
+ADIM 6 - TARAYICIDA AC
+--------------------------------------------------------
+
+Herhangi bir tarayici ac ve su adrese git:
+
+  http://localhost:4200
+
+Dashboard sayfasi acilmali ve sol tarafta sidebar gorunmeli.
+
+
+--------------------------------------------------------
+OZET - CALISTIRMA SIRASI
+--------------------------------------------------------
+
+  [Terminal 1]  Backend  -->  cd backend   && mvn spring-boot:run
+  [Terminal 2]  Frontend -->  cd frontend  && npm install && ng serve
+  Tarayici      -->  http://localhost:4200
+
+
+--------------------------------------------------------
+SORUN GIDERME
+--------------------------------------------------------
+
+SORUN: Backend baslamiyor, "Access denied for user 'root'"
+COZUM: application.properties dosyasindaki sifreyi kontrol et.
+
+SORUN: Backend baslamiyor, "Table doesn't exist" hatasi
+COZUM: Veritabani yuklemesi basarisiz olmus. ADIM 1'i tekrar yap.
+
+SORUN: Frontend acilmiyor, "ng is not recognized"
+COZUM: npm install -g @angular/cli@17  komutunu calistir.
+
+SORUN: "Port 8080 already in use"
+COZUM: Onceden acik kalmis bir Java sureci var.
+       Gorev Yoneticisi'nden (Task Manager) java.exe'yi kapat.
+
+SORUN: "Port 4200 already in use"
+COZUM: ng serve --port 4201  yazarak farkli port kullan,
+       tarayicide http://localhost:4201 adresine git.
+
+
+--------------------------------------------------------
+NOTLAR
+--------------------------------------------------------
+
+- Backend ve frontend ayni anda calismaledir.
+- Her ikisini de kapatinca uygulama durur.
+- Veritabani bir kez yuklendikten sonra tekrar yuklemeye
+  gerek yok, MySQL servisi calistigi surece veriler kalici.
+
+========================================================

@@ -1,0 +1,103 @@
+<div class="page-header">
+  <button class="btn btn-outline-secondary btn-sm mb-2" (click)="goBack()">
+    <i class="bi bi-arrow-left me-1"></i>Back to Crimes
+  </button>
+  <h1><i class="bi bi-file-earmark-text-fill me-2 text-danger"></i>Crime Detail</h1>
+</div>
+
+<div class="content-body">
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner-border text-danger"></div>
+  </div>
+
+  <ng-container *ngIf="!loading && crime">
+    <!-- Crime Info Card -->
+    <div class="feature-card mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="rounded-circle bg-danger d-flex align-items-center justify-content-center"
+             style="width:56px;height:56px;font-size:1.5rem;color:#fff;">
+          <i class="bi bi-file-earmark-text-fill"></i>
+        </div>
+        <div>
+          <h4 class="mb-0">{{ crime.crimeType }}</h4>
+          <span class="badge mt-1" [ngClass]="getStatusClass(crime.crimeStatus)">{{ crime.crimeStatus }}</span>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <small class="text-muted d-block">Crime ID</small>
+          <span class="badge bg-secondary fs-6">{{ crime.crimeId }}</span>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Date</small>
+          <strong>{{ crime.crimeDate }}</strong>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Time</small>
+          <strong>{{ crime.crimeTime || '—' }}</strong>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Location</small>
+          <strong>{{ crime.crimeLocation }}</strong>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">City</small>
+          <strong>{{ crime.city }}</strong>
+        </div>
+        <div class="col-md-4" *ngIf="crime.district">
+          <small class="text-muted d-block">District</small>
+          <strong>{{ crime.district }}</strong>
+        </div>
+        <div class="col-12" *ngIf="crime.description">
+          <small class="text-muted d-block">Description</small>
+          <p class="mb-0">{{ crime.description }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suspects -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <h5><i class="bi bi-people-fill me-2 text-warning"></i>Suspects ({{ suspects.length }})</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Gender</th>
+              <th>Nationality ID</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of suspects" [routerLink]="['/suspects', s.suspectId]" style="cursor:pointer;" title="View suspect detail">
+              <td><span class="badge bg-secondary">{{ s.suspectId }}</span></td>
+              <td>
+                <strong>{{ s.firstName }} {{ s.lastName }}</strong>
+                <br><small class="text-muted">{{ s.address || '' }}</small>
+              </td>
+              <td>{{ getGenderLabel(s.gender) }}</td>
+              <td><code>{{ s.nationId }}</code></td>
+              <td>
+                <span class="badge"
+                  [class.bg-info]="s.status === 'Active'"
+                  [class.bg-secondary]="s.status === 'Released'"
+                  [class.bg-danger]="s.status === 'Wanted'"
+                  [style.background-color]="s.status === 'Incarcerated' ? '#6f42c1' : ''">
+                  {{ s.status }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="suspects.length === 0">
+              <td colspan="5" class="text-center text-muted py-4">No suspects linked to this crime.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+</div>

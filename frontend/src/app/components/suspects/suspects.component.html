@@ -1,0 +1,73 @@
+<div class="page-header">
+  <h1><i class="bi bi-person-fill-exclamation me-2 text-warning"></i>Suspects</h1>
+  <p>Browse and search all registered suspects</p>
+</div>
+
+<div class="content-body">
+  <!-- Search Bar -->
+  <div class="feature-card mb-3">
+    <div class="input-group">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="form-control" placeholder="Search by name, nationality, or status..."
+             [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+      <button class="btn btn-primary" (click)="onSearch()">Search</button>
+      <button class="btn btn-outline-secondary" (click)="clearSearch()" *ngIf="searchQuery">
+        <i class="bi bi-x"></i> Clear
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div class="table-card" *ngIf="!loading">
+    <div class="table-card-header">
+      <h5><i class="bi bi-people-fill me-2"></i>Suspects ({{ suspects.length }})</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Gender</th>
+            <th>Nationality ID</th>
+            <th>Height / Weight</th>
+            <th>Eye / Hair</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of suspects" [routerLink]="['/suspects', s.suspectId]" style="cursor:pointer;" title="View details">
+            <td><span class="badge bg-secondary">{{ s.suspectId }}</span></td>
+            <td>
+              <strong>{{ s.firstName }} {{ s.lastName }}</strong>
+              <br><small class="text-muted">{{ s.address }}</small>
+            </td>
+            <td>{{ s.dateOfBirth }}</td>
+            <td>{{ getGenderLabel(s.gender) }}</td>
+            <td><code>{{ s.nationId }}</code></td>
+            <td>{{ s.heightCm || '—' }} cm / {{ s.weightKg || '—' }} kg</td>
+            <td>{{ s.eyeColor || '—' }} / {{ s.hairColor || '—' }}</td>
+            <td>
+              <span class="badge"
+                [class.bg-info]="s.status === 'Active'"
+                [class.bg-secondary]="s.status === 'Released'"
+                [class.bg-danger]="s.status === 'Wanted'"
+                [style.background-color]="s.status === 'Incarcerated' ? '#6f42c1' : ''">
+                {{ s.status }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="suspects.length === 0">
+            <td colspan="8" class="text-center text-muted py-4">No suspects found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="page-header">
+  <h1><i class="bi bi-person-x-fill me-2 text-danger"></i>Feature 5 — Remove Suspect from Crime</h1>
+  <p>Remove a suspect from a crime record (they did not do it)</p>
+</div>
+
+<div class="content-body">
+  <!-- SQL Reference -->
+  <div class="alert alert-light border mb-3" style="font-size:0.8rem">
+    <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
+    <code class="ms-2">DELETE FROM crime_suspect WHERE crime_id = :crimeId AND suspect_id = :suspectId</code>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+      <div class="feature-card border-danger" style="border: 1px solid #f8d7da !important">
+        <h5><i class="bi bi-trash3 me-2 text-danger"></i>Remove Suspect from Crime</h5>
+
+        <div class="alert alert-warning d-flex align-items-start gap-2 mb-3">
+          <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+          <div>
+            <strong>Warning:</strong> This will permanently delete the link between the suspect and the crime
+            in the <code>crime_suspect</code> table. This action cannot be undone.
+          </div>
+        </div>
+
+        <div *ngIf="successMsg" class="alert alert-success">
+          <i class="bi bi-check-circle-fill me-2"></i>{{ successMsg }}
+        </div>
+        <div *ngIf="errorMsg" class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <!-- Step 1: Select Suspect -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              <span class="badge bg-primary me-1">1</span> Select Suspect *
+            </label>
+            <select class="form-select" formControlName="suspectId" (change)="onSuspectChange()">
+              <option value="">— Select Suspect —</option>
+              <option *ngFor="let s of suspects" [value]="s.suspectId">
+                #{{ s.suspectId }} — {{ s.firstName }} {{ s.lastName }} ({{ s.nationId }})
+              </option>
+            </select>
+          </div>
+
+          <!-- Step 2: Select Crime (only for selected suspect) -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">
+              <span class="badge bg-primary me-1">2</span> Select Crime *
+            </label>
+
+            <div *ngIf="!form.value.suspectId" class="form-select text-muted" style="color:#aaa; cursor:not-allowed; background:#f8f9fa">
+              — Select a suspect first —
+            </div>
+
+            <div *ngIf="form.value.suspectId && loadingCrimes" class="text-muted small p-2">
+              <span class="spinner-border spinner-border-sm me-1"></span> Loading crimes...
+            </div>
+
+            <select *ngIf="form.value.suspectId && !loadingCrimes"
+                    class="form-select" formControlName="crimeId">
+              <option value="">— Select Crime —</option>
+              <option *ngFor="let c of crimes" [value]="c.crimeId">
+                #{{ c.crimeId }} — {{ c.crimeType }} ({{ c.city }}, {{ c.crimeDate }})
+              </option>
+            </select>
+
+            <div *ngIf="form.value.suspectId && !loadingCrimes && crimes.length === 0"
+                 class="text-muted small mt-1">
+              <i class="bi bi-info-circle me-1"></i>No crimes found for this suspect.
+            </div>
+          </div>
+
+          <!-- Confirmation Summary -->
+          <div class="alert alert-info" *ngIf="form.value.crimeId && form.value.suspectId">
+            <strong>You are about to remove:</strong><br>
+            Suspect: <strong>{{ selectedSuspectName }}</strong><br>
+            from Crime: <strong>{{ selectedCrimeName }}</strong>
+          </div>
+
+          <!-- Confirmation Checkbox -->
+          <div class="form-check mb-3" *ngIf="form.value.crimeId && form.value.suspectId">
+            <input class="form-check-input" type="checkbox" id="confirmCheck" [(ngModel)]="confirmed" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label text-danger fw-semibold" for="confirmCheck">
+              I confirm this suspect is innocent and should be removed from this crime
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-danger"
+                  [disabled]="form.invalid || !confirmed || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            <i class="bi bi-person-x me-1" *ngIf="!loading"></i>
+            Remove Suspect from Crime
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sample Data Panel -->
+    <div class="col-md-5">
+      <div class="feature-card h-100" style="background:#fff5f5">
+        <h5><i class="bi bi-info-circle me-2 text-info"></i>Sample Removals to Try</h5>
+        <p class="text-muted small">
+          These suspect-crime links exist in the database and can be removed:
+        </p>
+        <table class="table table-sm">
+          <thead><tr><th>Suspect</th><th>Crime</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>#13 Viktor Kozlov</td><td>#8 (Harbor Murder)</td><td>Suspect</td></tr>
+            <tr><td>#7 Omar Hassan</td><td>#16 (Riverside Murder)</td><td>Suspect</td></tr>
+            <tr><td>#5 Ivan Petrov</td><td>#22 (Ransomware)</td><td>Accomplice</td></tr>
+            <tr><td>#3 Carlos Mendoza</td><td>#11 (Alley Murder)</td><td>Suspect</td></tr>
+          </tbody>
+        </table>
+        <p class="text-muted small"><i class="bi bi-lightbulb me-1"></i>Select the suspect first, then only their linked crimes will appear.</p>
+      </div>
+    </div>
+  </div>
+</div>

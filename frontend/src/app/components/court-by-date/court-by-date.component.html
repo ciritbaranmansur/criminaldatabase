@@ -1,0 +1,82 @@
+<div class="page-header">
+  <h1><i class="bi bi-calendar-check-fill me-2 text-primary"></i>Feature 1 — Court by Date</h1>
+  <p>List of all suspects and crime information appearing in court on a selected date</p>
+</div>
+
+<div class="content-body">
+  <!-- SQL Query Reference -->
+  <div class="alert alert-light border mb-3" style="font-size:0.8rem">
+    <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
+    <code class="ms-2">SELECT sn.*, s.*, c.* FROM sentence sn JOIN crime c ON ... JOIN suspect s ON ... WHERE sn.hearing_date = :date</code>
+  </div>
+
+  <!-- Date Picker Form -->
+  <div class="feature-card mb-3">
+    <h5><i class="bi bi-calendar3 me-2"></i>Select Hearing Date</h5>
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label">Hearing Date</label>
+        <input type="date" class="form-control" [(ngModel)]="selectedDate">
+        <div class="form-text">Try: 2024-07-15, 2025-01-10, 2025-04-05, 2025-08-01</div>
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-primary" (click)="search()" [disabled]="!selectedDate || loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+          <i class="bi bi-search me-1" *ngIf="!loading"></i>
+          Search Court Cases
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <!-- Results -->
+  <div class="table-card" *ngIf="searched">
+    <div class="table-card-header">
+      <h5>
+        <i class="bi bi-list-check me-2"></i>
+        Results for {{ selectedDate }}
+        <span class="badge bg-primary ms-2">{{ results.length }} case(s)</span>
+      </h5>
+    </div>
+
+    <div *ngIf="results.length === 0" class="p-4 text-center text-muted">
+      <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
+      No court hearings scheduled for this date.
+    </div>
+
+    <div class="table-responsive" *ngIf="results.length > 0">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>Case #</th>
+            <th>Suspect</th>
+            <th>Gender</th>
+            <th>Crime ID</th>
+            <th>Crime Type</th>
+            <th>Crime Date</th>
+            <th>City</th>
+            <th>Description</th>
+            <th>Verdict</th>
+            <th>Sentence Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of results">
+            <td><strong>#{{ r.courtCaseNo }}</strong></td>
+            <td>{{ r.firstName }} {{ r.lastName }}</td>
+            <td>{{ r.gender === 'M' ? 'Male' : 'Female' }}</td>
+            <td><span class="badge bg-secondary">{{ r.crimeId }}</span></td>
+            <td>{{ r.crimeType }}</td>
+            <td>{{ r.crimeDate }}</td>
+            <td>{{ r.city }}</td>
+            <td><small>{{ r.description || '—' }}</small></td>
+            <td><span [ngClass]="getVerdictClass(r.verdict)">{{ r.verdict || 'Pending' }}</span></td>
+            <td>{{ r.sentenceType || '—' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="page-header">
+  <h1><i class="bi bi-person-plus-fill me-2 text-success"></i>Add New Suspect</h1>
+  <p>Register a new suspect into the criminal database</p>
+</div>
+
+<div class="content-body">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="feature-card">
+        <h5><i class="bi bi-person-vcard me-2"></i>Suspect Information</h5>
+
+        <div *ngIf="successMsg" class="alert alert-success d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill"></i>
+          <div>{{ successMsg }} <a routerLink="/suspects" class="alert-link">View in Suspects list</a></div>
+        </div>
+        <div *ngIf="errorMsg" class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <!-- Row 1: Name -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">First Name *</label>
+              <input type="text" class="form-control" formControlName="firstName" placeholder="e.g. John">
+              <div class="text-danger small" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+                First name is required.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Last Name *</label>
+              <input type="text" class="form-control" formControlName="lastName" placeholder="e.g. Doe">
+              <div class="text-danger small" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+                Last name is required.
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: DOB, Gender -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Date of Birth *</label>
+              <input type="date" class="form-control" formControlName="dateOfBirth">
+              <div class="text-danger small" *ngIf="form.get('dateOfBirth')?.invalid && form.get('dateOfBirth')?.touched">
+                Date of birth is required.
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Gender *</label>
+              <select class="form-select" formControlName="gender">
+                <option value="">— Select —</option>
+                <option *ngFor="let g of genderOptions" [value]="g.value">{{ g.label }}</option>
+              </select>
+              <div class="text-danger small" *ngIf="form.get('gender')?.invalid && form.get('gender')?.touched">
+                Required.
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Status *</label>
+              <select class="form-select" formControlName="status">
+                <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 3: Nation ID -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">National ID *</label>
+            <input type="text" class="form-control" formControlName="nationId" placeholder="e.g. TR-123456789">
+            <div class="text-danger small" *ngIf="form.get('nationId')?.invalid && form.get('nationId')?.touched">
+              National ID is required.
+            </div>
+          </div>
+
+          <!-- Row 4: Height, Weight -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Height (cm)</label>
+              <input type="number" class="form-control" formControlName="heightCm" placeholder="e.g. 175" min="100" max="250">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Weight (kg)</label>
+              <input type="number" class="form-control" formControlName="weightKg" placeholder="e.g. 75" min="30" max="300">
+            </div>
+          </div>
+
+          <!-- Row 5: Eye Color, Hair Color -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Eye Color</label>
+              <select class="form-select" formControlName="eyeColor">
+                <option [value]="null">— Unknown —</option>
+                <option *ngFor="let c of eyeColorOptions" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Hair Color</label>
+              <select class="form-select" formControlName="hairColor">
+                <option [value]="null">— Unknown —</option>
+                <option *ngFor="let c of hairColorOptions" [value]="c">{{ c }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 6: Address -->
+          <div class="mb-4">
+            <label class="form-label">Address</label>
+            <input type="text" class="form-control" formControlName="address" placeholder="e.g. 123 Main St, Ankara">
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success" [disabled]="form.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="bi bi-person-plus me-1" *ngIf="!loading"></i>
+              Add Suspect
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="reset()">
+              <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="col-md-4">
+      <div class="feature-card h-100" style="background:#f0fff4">
+        <h5><i class="bi bi-info-circle me-2 text-success"></i>Required Fields</h5>
+        <ul class="small text-muted ps-3">
+          <li>First &amp; Last Name</li>
+          <li>Date of Birth</li>
+          <li>Gender (M/F)</li>
+          <li>National ID (must be unique)</li>
+          <li>Status (default: Active)</li>
+        </ul>
+        <hr>
+        <h6 class="text-muted">Status Options</h6>
+        <div class="d-flex flex-wrap gap-1">
+          <span class="badge bg-info">Active</span>
+          <span class="badge bg-danger">Wanted</span>
+          <span class="badge" style="background:#6f42c1">Incarcerated</span>
+          <span class="badge bg-secondary">Released</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="page-header">
+  <h1><i class="bi bi-person-badge-fill me-2 text-primary"></i>Add New Officer</h1>
+  <p>Register a new law enforcement officer into the database</p>
+</div>
+
+<div class="content-body">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="feature-card">
+        <h5><i class="bi bi-person-vcard me-2"></i>Officer Information</h5>
+
+        <div *ngIf="successMsg" class="alert alert-success d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill"></i>
+          <div>{{ successMsg }} <a routerLink="/officers" class="alert-link">View in Officers list</a></div>
+        </div>
+        <div *ngIf="errorMsg" class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <!-- Row 1: Name -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">First Name *</label>
+              <input type="text" class="form-control" formControlName="firstName" placeholder="e.g. John">
+              <div class="text-danger small" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+                First name is required.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Last Name *</label>
+              <input type="text" class="form-control" formControlName="lastName" placeholder="e.g. Smith">
+              <div class="text-danger small" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+                Last name is required.
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Badge -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Badge Number *</label>
+            <input type="text" class="form-control" formControlName="badgeNumber" placeholder="e.g. NYC-0042">
+            <div class="text-danger small" *ngIf="form.get('badgeNumber')?.invalid && form.get('badgeNumber')?.touched">
+              Badge number is required.
+            </div>
+          </div>
+
+          <!-- Row 3: Rank, Unit -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Rank *</label>
+              <select class="form-select" formControlName="rankId">
+                <option value="">— Select Rank —</option>
+                <option *ngFor="let r of ranks" [value]="r.rankId">{{ r.rankName }}</option>
+              </select>
+              <div class="text-danger small" *ngIf="form.get('rankId')?.invalid && form.get('rankId')?.touched">
+                Rank is required.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Unit *</label>
+              <select class="form-select" formControlName="unitId">
+                <option value="">— Select Unit —</option>
+                <option *ngFor="let u of units" [value]="u.unitId">{{ u.unitName }}</option>
+              </select>
+              <div class="text-danger small" *ngIf="form.get('unitId')?.invalid && form.get('unitId')?.touched">
+                Unit is required.
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 4: Phone, Email -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Phone</label>
+              <input type="text" class="form-control" formControlName="phone" placeholder="e.g. +1-555-0100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" formControlName="email" placeholder="e.g. john.smith@police.gov">
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="bi bi-person-plus me-1" *ngIf="!loading"></i>
+              Add Officer
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="reset()">
+              <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="col-md-4">
+      <div class="feature-card h-100" style="background:#f0f4ff">
+        <h5><i class="bi bi-info-circle me-2 text-primary"></i>Required Fields</h5>
+        <ul class="small text-muted ps-3">
+          <li>First &amp; Last Name</li>
+          <li>Badge Number (must be unique)</li>
+          <li>Rank</li>
+          <li>Unit</li>
+        </ul>
+        <hr>
+        <h6 class="text-muted">Available Ranks</h6>
+        <div class="d-flex flex-wrap gap-1 mb-3">
+          <span *ngFor="let r of ranks" class="badge bg-info">{{ r.rankName }}</span>
+        </div>
+        <h6 class="text-muted">Available Units</h6>
+        <div class="d-flex flex-wrap gap-1">
+          <span *ngFor="let u of units" class="badge bg-secondary">{{ u.unitName }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

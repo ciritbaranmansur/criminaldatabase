@@ -1,0 +1,64 @@
+<div class="page-header">
+  <h1><i class="bi bi-bar-chart-fill me-2 text-success"></i>Feature 2 — Officer Arrest Statistics</h1>
+  <p>Number of male and female suspects arrested by each officer</p>
+</div>
+
+<div class="content-body">
+  <!-- SQL Reference -->
+  <div class="alert alert-light border mb-3" style="font-size:0.8rem">
+    <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
+    <code class="ms-2">SELECT officer, SUM(CASE WHEN gender='M'...) AS male_arrests, SUM(CASE WHEN gender='F'...) AS female_arrests, COUNT(*) FROM arrest JOIN officer JOIN suspect GROUP BY officer_id</code>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner-border text-success"></div>
+  </div>
+
+  <div class="table-card" *ngIf="!loading">
+    <div class="table-card-header">
+      <h5><i class="bi bi-person-badge-fill me-2"></i>Arrest Statistics by Officer</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>Officer ID</th>
+            <th>Officer Name</th>
+            <th>Rank</th>
+            <th>Male Arrests</th>
+            <th>Female Arrests</th>
+            <th>Total Arrests</th>
+            <th>Gender Distribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of stats">
+            <td><span class="badge bg-primary">{{ row.officerId }}</span></td>
+            <td><strong>{{ row.officerName }}</strong></td>
+            <td><span class="badge bg-info">{{ row.rankName }}</span></td>
+            <td>
+              <span class="badge bg-primary me-1">{{ row.maleArrests }}</span>
+              <i class="bi bi-gender-male text-primary"></i>
+            </td>
+            <td>
+              <span class="badge bg-danger me-1">{{ row.femaleArrests }}</span>
+              <i class="bi bi-gender-female text-danger"></i>
+            </td>
+            <td><strong>{{ row.totalArrests }}</strong></td>
+            <td style="min-width:150px">
+              <div class="progress" style="height:12px" title="Blue = Male, Red = Female">
+                <div class="progress-bar bg-primary" [style.width.%]="getMalePercent(row)"
+                     [title]="'Male: ' + getMalePercent(row) + '%'"></div>
+                <div class="progress-bar bg-danger" [style.width.%]="getFemalePercent(row)"
+                     [title]="'Female: ' + getFemalePercent(row) + '%'"></div>
+              </div>
+              <small class="text-muted">{{ getMalePercent(row) }}% M / {{ getFemalePercent(row) }}% F</small>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

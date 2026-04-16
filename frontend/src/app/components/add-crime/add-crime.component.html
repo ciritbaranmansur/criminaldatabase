@@ -1,0 +1,125 @@
+<div class="page-header">
+  <h1><i class="bi bi-file-earmark-plus-fill me-2 text-warning"></i>Add New Crime</h1>
+  <p>Register a new crime record into the database</p>
+</div>
+
+<div class="content-body">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="feature-card">
+        <h5><i class="bi bi-clipboard2-plus me-2"></i>Crime Information</h5>
+
+        <div *ngIf="successMsg" class="alert alert-success d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill"></i>
+          <div>{{ successMsg }} <a routerLink="/crimes" class="alert-link">View in Crimes list</a></div>
+        </div>
+        <div *ngIf="errorMsg" class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <!-- Row 1: Type, Status -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-8">
+              <label class="form-label fw-semibold">Crime Type *</label>
+              <select class="form-select" formControlName="crimeType">
+                <option value="">— Select Type —</option>
+                <option *ngFor="let t of crimeTypes" [value]="t">{{ t }}</option>
+              </select>
+              <div class="text-danger small" *ngIf="form.get('crimeType')?.invalid && form.get('crimeType')?.touched">
+                Crime type is required.
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold">Status *</label>
+              <select class="form-select" formControlName="crimeStatus">
+                <option *ngFor="let s of statusOptions" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 2: Date, Time -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Crime Date *</label>
+              <input type="date" class="form-control" formControlName="crimeDate">
+              <div class="text-danger small" *ngIf="form.get('crimeDate')?.invalid && form.get('crimeDate')?.touched">
+                Date is required.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Crime Time *</label>
+              <input type="time" class="form-control" formControlName="crimeTime">
+            </div>
+          </div>
+
+          <!-- Row 3: Location -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Crime Location *</label>
+            <input type="text" class="form-control" formControlName="crimeLocation" placeholder="e.g. 45 Harbor St">
+            <div class="text-danger small" *ngIf="form.get('crimeLocation')?.invalid && form.get('crimeLocation')?.touched">
+              Location is required.
+            </div>
+          </div>
+
+          <!-- Row 4: City, District -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">City *</label>
+              <input type="text" class="form-control" formControlName="city" placeholder="e.g. Istanbul">
+              <div class="text-danger small" *ngIf="form.get('city')?.invalid && form.get('city')?.touched">
+                City is required.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">District</label>
+              <input type="text" class="form-control" formControlName="district" placeholder="e.g. Kadikoy">
+            </div>
+          </div>
+
+          <!-- Row 5: Description -->
+          <div class="mb-4">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" formControlName="description" rows="3"
+                      placeholder="Brief description of the crime..."></textarea>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-warning text-dark" [disabled]="form.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="bi bi-plus-circle me-1" *ngIf="!loading"></i>
+              Add Crime
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="reset()">
+              <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="col-md-4">
+      <div class="feature-card h-100" style="background:#fffbf0">
+        <h5><i class="bi bi-info-circle me-2 text-warning"></i>Required Fields</h5>
+        <ul class="small text-muted ps-3">
+          <li>Crime Type</li>
+          <li>Crime Date</li>
+          <li>Crime Time</li>
+          <li>Location</li>
+          <li>City</li>
+          <li>Status (default: Open)</li>
+        </ul>
+        <hr>
+        <h6 class="text-muted">Status Options</h6>
+        <div class="d-flex flex-wrap gap-1">
+          <span class="badge bg-danger">Open</span>
+          <span class="badge bg-warning text-dark">Under Investigation</span>
+          <span class="badge bg-success">Closed</span>
+          <span class="badge bg-secondary">Cold Case</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

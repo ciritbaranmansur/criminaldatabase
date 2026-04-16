@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h1><i class="bi bi-person-badge-fill me-2 text-primary"></i>Officers</h1>
+  <p>All law enforcement officers in the database</p>
+</div>
+
+<div class="content-body">
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div class="table-card" *ngIf="!loading">
+    <div class="table-card-header">
+      <h5><i class="bi bi-people-fill me-2"></i>Officers ({{ officers.length }})</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Badge #</th>
+            <th>Name</th>
+            <th>Rank</th>
+            <th>Unit</th>
+            <th>Phone</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of officers">
+            <td><span class="badge bg-primary">{{ o.officerId }}</span></td>
+            <td><code>{{ o.badgeNumber }}</code></td>
+            <td><strong>{{ o.firstName }} {{ o.lastName }}</strong></td>
+            <td>
+              <span class="badge bg-info">{{ o.rank.rankName }}</span>
+            </td>
+            <td>{{ o.unit.unitName }}</td>
+            <td>{{ o.phone || '—' }}</td>
+            <td>{{ o.email || '—' }}</td>
+          </tr>
+          <tr *ngIf="officers.length === 0">
+            <td colspan="7" class="text-center text-muted py-4">No officers found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,223 @@
+================================================================
+  CRIMINAL DATABASE PROJECT — TÜM SQL QUERY'LERİ
+  CSE 204 | Akdeniz University
+================================================================
+
+
+----------------------------------------------------------------
+  SUSPECTS
+----------------------------------------------------------------
+
+-- Tüm şüphelileri listele
+SELECT * FROM suspect ORDER BY suspect_id;
+
+-- Şüpheli ara (isim, uyruk, status'e göre)
+SELECT * FROM suspect
+WHERE LOWER(first_name)  LIKE LOWER('%{arama}%')
+   OR LOWER(last_name)   LIKE LOWER('%{arama}%')
+   OR LOWER(nation_id)   LIKE LOWER('%{arama}%')
+   OR LOWER(status)      LIKE LOWER('%{arama}%');
+
+-- ID'ye göre tek şüpheli getir
+SELECT * FROM suspect WHERE suspect_id = {id};
+
+-- Belirli bir suçun şüphelilerini getir
+SELECT s.*
+FROM suspect s
+JOIN crime_suspect cs ON s.suspect_id = cs.suspect_id
+WHERE cs.crime_id = {crime_id};
+
+-- Yeni şüpheli ekle
+INSERT INTO suspect (suspect_id, first_name, last_name, date_of_birth, gender,
+                     nation_id, height_cm, weight_kg, eye_color, hair_color, address, status)
+VALUES ({max_id + 1}, '{first_name}', '{last_name}', '{date_of_birth}', '{M/F}',
+        '{nation_id}', {height_cm}, {weight_kg}, '{eye_color}', '{hair_color}', '{address}', '{status}');
+
+
+----------------------------------------------------------------
+  CRIMES
+----------------------------------------------------------------
+
+-- Tüm suçları listele
+SELECT * FROM crime ORDER BY crime_date DESC;
+
+-- Filtreli suç listesi (type, status, city opsiyonel)
+SELECT * FROM crime
+WHERE (:type   IS NULL OR crime_type   = '{type}')
+  AND (:status IS NULL OR crime_status = '{status}')
+  AND (:city   IS NULL OR LOWER(city) LIKE LOWER('%{city}%'));
+
+-- ID'ye göre tek suç getir
+SELECT * FROM crime WHERE crime_id = {id};
+
+-- Belirli bir şüphelinin suçlarını getir
+SELECT c.*
+FROM crime c
+JOIN crime_suspect cs ON c.crime_id = cs.crime_id
+WHERE cs.suspect_id = {suspect_id}
+ORDER BY c.crime_date DESC;
+
+-- Yeni suç ekle
+INSERT INTO crime (crime_id, crime_type, crime_date, crime_time, crime_location,
+                   city, district, description, crime_status)
+VALUES ({max_id + 1}, '{crime_type}', '{crime_date}', '{crime_time}', '{crime_location}',
+        '{city}', '{district}', '{description}', '{crime_status}');
+
+-- Suç türlerine göre sayım (Dashboard)
+SELECT crime_type, COUNT(*) AS count
+FROM crime
+GROUP BY crime_type
+ORDER BY count DESC;
+
+-- Suç durumlarına göre sayım (Dashboard)
+SELECT crime_status, COUNT(*) AS count
+FROM crime
+GROUP BY crime_status;
+
+
+----------------------------------------------------------------
+  OFFICERS
+----------------------------------------------------------------
+
+-- Tüm memurları listele
+SELECT o.*, r.rank_name, u.unit_name
+FROM officer o
+JOIN officer_rank r ON o.rank_id = r.rank_id
+JOIN unit u         ON o.unit_id = u.unit_id;
+
+-- ID'ye göre tek memur getir
+SELECT o.*, r.rank_name, u.unit_name
+FROM officer o
+JOIN officer_rank r ON o.rank_id = r.rank_id
+JOIN unit u         ON o.unit_id = u.unit_id
+WHERE o.officer_id = {id};
+
+-- Yeni memur ekle
+INSERT INTO officer (officer_id, first_name, last_name, badge_number, rank_id, unit_id, phone, email)
+VALUES ({max_id + 1}, '{first_name}', '{last_name}', '{badge_number}',
+        {rank_id}, {unit_id}, '{phone}', '{email}');
+
+
+----------------------------------------------------------------
+  ARRESTS
+----------------------------------------------------------------
+
+-- Tüm tutuklamaları listele
+SELECT * FROM arrest ORDER BY arrest_date DESC;
+
+-- Yeni tutuklama ekle  [Query 4]
+INSERT INTO arrest (arrest_id, crime_id, suspect_id, arresting_officer_id, arrest_date, arrest_location)
+VALUES ({max_id + 1}, {crime_id}, {suspect_id}, {officer_id}, '{arrest_date}', '{arrest_location}');
+
+-- Aynı anda crime_suspect bağlantısını da kur (yoksa ekle, varsa atla)
+INSERT IGNORE INTO crime_suspect (crime_id, suspect_id)
+VALUES ({crime_id}, {suspect_id});
+
+
+----------------------------------------------------------------
+  QUERY 1 — Belirli Bir Tarihteki Duruşmalar
+----------------------------------------------------------------
+-- Belirli bir tarihte mahkemede görünen tüm şüpheli ve suç bilgilerini getir
+
+SELECT
+    sn.court_case_no,
+    sn.hearing_date,
+    s.suspect_id,
+    s.first_name,
+    s.last_name,
+    s.gender,
+    c.crime_id,
+    c.crime_type,
+    c.crime_date,
+    c.city,
+    c.description,
+    sn.verdict,
+    sn.sentence_type
+FROM sentence sn
+JOIN crime   c ON sn.crime_id   = c.crime_id
+JOIN suspect s ON sn.suspect_id = s.suspect_id
+WHERE sn.hearing_date = '{tarih}'
+ORDER BY sn.court_case_no;
+
+
+----------------------------------------------------------------
+  QUERY 2 — Memur Tutuklama İstatistikleri (Cinsiyete Göre)
+----------------------------------------------------------------
+-- Her memurun kaç erkek, kaç kadın şüpheli tutukladığını listele
+
+SELECT
+    o.officer_id,
+    CONCAT(o.first_name, ' ', o.last_name) AS officer_name,
+    r.rank_name,
+    SUM(CASE WHEN s.gender = 'M' THEN 1 ELSE 0 END) AS male_arrests,
+    SUM(CASE WHEN s.gender = 'F' THEN 1 ELSE 0 END) AS female_arrests,
+    COUNT(*) AS total_arrests
+FROM arrest a
+JOIN officer      o ON a.arresting_officer_id = o.officer_id
+JOIN suspect      s ON a.suspect_id           = s.suspect_id
+JOIN officer_rank r ON o.rank_id              = r.rank_id
+GROUP BY o.officer_id, o.first_name, o.last_name, r.rank_name
+ORDER BY total_arrests DESC;
+
+
+----------------------------------------------------------------
+  QUERY 3 — Duruşma Tarihini Güncelle
+----------------------------------------------------------------
+-- Belirli bir dava numarasının duruşma tarihini güncelle
+
+UPDATE sentence
+SET hearing_date = '{yeni_tarih}'
+WHERE court_case_no = {case_no};
+
+
+----------------------------------------------------------------
+  QUERY 4 — Yeni Tutuklama Ekle
+----------------------------------------------------------------
+-- (Yukarıdaki Arrests bölümünde gösterildi)
+-- arrest tablosuna INSERT + crime_suspect tablosuna INSERT IGNORE
+
+
+----------------------------------------------------------------
+  QUERY 5 — Şüpheliyi Suçtan Çıkar
+----------------------------------------------------------------
+-- Bir şüpheliyi belirli bir suçla olan bağlantısından kaldır
+
+DELETE FROM crime_suspect
+WHERE crime_id   = {crime_id}
+  AND suspect_id = {suspect_id};
+
+
+----------------------------------------------------------------
+  DASHBOARD İSTATİSTİKLERİ
+----------------------------------------------------------------
+
+-- Toplam suç sayısı
+SELECT COUNT(*) FROM crime;
+
+-- Toplam şüpheli sayısı
+SELECT COUNT(*) FROM suspect;
+
+-- Toplam memur sayısı
+SELECT COUNT(*) FROM officer;
+
+-- Toplam tutuklama sayısı
+SELECT COUNT(*) FROM arrest;
+
+
+----------------------------------------------------------------
+  YARDIMCI QUERY'LER (Dropdown listeleri için)
+----------------------------------------------------------------
+
+-- Tüm rütbeleri getir
+SELECT * FROM officer_rank ORDER BY rank_id;
+
+-- Tüm birimleri getir
+SELECT * FROM unit ORDER BY unit_id;
+
+-- Yeni ID üretmek için max değer sorgula
+SELECT MAX(suspect_id)  FROM suspect;
+SELECT MAX(crime_id)    FROM crime;
+SELECT MAX(officer_id)  FROM officer;
+SELECT MAX(arrest_id)   FROM arrest;
+
+================================================================

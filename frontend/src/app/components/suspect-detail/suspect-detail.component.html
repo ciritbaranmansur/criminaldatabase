@@ -1,0 +1,102 @@
+<div class="page-header">
+  <button class="btn btn-outline-secondary btn-sm mb-2" (click)="goBack()">
+    <i class="bi bi-arrow-left me-1"></i>Back to Suspects
+  </button>
+  <h1><i class="bi bi-person-fill-exclamation me-2 text-warning"></i>Suspect Detail</h1>
+</div>
+
+<div class="content-body">
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner-border text-warning"></div>
+  </div>
+
+  <ng-container *ngIf="!loading && suspect">
+    <!-- Suspect Info Card -->
+    <div class="feature-card mb-4">
+      <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center"
+             style="width:56px;height:56px;font-size:1.5rem;color:#000;">
+          <i class="bi bi-person-fill"></i>
+        </div>
+        <div>
+          <h4 class="mb-0">{{ suspect.firstName }} {{ suspect.lastName }}</h4>
+          <span class="badge mt-1"
+            [class.bg-info]="suspect.status === 'Active'"
+            [class.bg-secondary]="suspect.status === 'Released'"
+            [class.bg-danger]="suspect.status === 'Wanted'"
+            [style.background-color]="suspect.status === 'Incarcerated' ? '#6f42c1' : ''">
+            {{ suspect.status }}
+          </span>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <small class="text-muted d-block">Suspect ID</small>
+          <span class="badge bg-secondary fs-6">{{ suspect.suspectId }}</span>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Date of Birth</small>
+          <strong>{{ suspect.dateOfBirth }}</strong>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Gender</small>
+          <strong>{{ getGenderLabel(suspect.gender) }}</strong>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Nationality ID</small>
+          <code>{{ suspect.nationId }}</code>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Height / Weight</small>
+          <strong>{{ suspect.heightCm || '—' }} cm / {{ suspect.weightKg || '—' }} kg</strong>
+        </div>
+        <div class="col-md-4">
+          <small class="text-muted d-block">Eye / Hair Color</small>
+          <strong>{{ suspect.eyeColor || '—' }} / {{ suspect.hairColor || '—' }}</strong>
+        </div>
+        <div class="col-12" *ngIf="suspect.address">
+          <small class="text-muted d-block">Address</small>
+          <strong>{{ suspect.address }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crimes -->
+    <div class="table-card">
+      <div class="table-card-header">
+        <h5><i class="bi bi-file-earmark-text-fill me-2 text-danger"></i>Related Crimes ({{ crimes.length }})</h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>City</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of crimes" [routerLink]="['/crimes', c.crimeId]" style="cursor:pointer;" title="View crime detail">
+              <td><span class="badge bg-secondary">{{ c.crimeId }}</span></td>
+              <td><strong>{{ c.crimeType }}</strong></td>
+              <td>{{ c.crimeDate }}</td>
+              <td>{{ c.crimeLocation }}</td>
+              <td>{{ c.city }}</td>
+              <td>
+                <span class="badge" [ngClass]="getCrimeStatusClass(c.crimeStatus)">{{ c.crimeStatus }}</span>
+              </td>
+            </tr>
+            <tr *ngIf="crimes.length === 0">
+              <td colspan="6" class="text-center text-muted py-4">No crimes linked to this suspect.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+</div>

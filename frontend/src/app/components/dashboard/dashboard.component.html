@@ -1,0 +1,173 @@
+<div class="page-header">
+  <h1><i class="bi bi-speedometer2 me-2 text-primary"></i>Dashboard</h1>
+  <p>Overview of the criminal database system</p>
+</div>
+
+<div class="content-body">
+
+  <!-- Error -->
+  <div *ngIf="error" class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading && !error" class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!loading && stats">
+
+    <!-- Stat Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="card stat-card text-white" style="background: linear-gradient(135deg, #e74c3c, #c0392b)">
+          <div class="card-body d-flex align-items-center gap-3 py-3">
+            <i class="bi bi-file-earmark-text-fill stat-icon"></i>
+            <div>
+              <div class="stat-number">{{ stats.totalCrimes }}</div>
+              <div class="stat-label">Total Crimes</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card stat-card text-white" style="background: linear-gradient(135deg, #8e44ad, #6c3483)">
+          <div class="card-body d-flex align-items-center gap-3 py-3">
+            <i class="bi bi-person-fill-exclamation stat-icon"></i>
+            <div>
+              <div class="stat-number">{{ stats.totalSuspects }}</div>
+              <div class="stat-label">Suspects</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card stat-card text-white" style="background: linear-gradient(135deg, #2980b9, #1a5276)">
+          <div class="card-body d-flex align-items-center gap-3 py-3">
+            <i class="bi bi-person-badge-fill stat-icon"></i>
+            <div>
+              <div class="stat-number">{{ stats.totalOfficers }}</div>
+              <div class="stat-label">Officers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="card stat-card text-white" style="background: linear-gradient(135deg, #27ae60, #1e8449)">
+          <div class="card-body d-flex align-items-center gap-3 py-3">
+            <i class="bi bi-handcuffs stat-icon"></i>
+            <div>
+              <div class="stat-number">{{ stats.totalArrests }}</div>
+              <div class="stat-label">Arrests</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-3">
+      <!-- Crimes by Type -->
+      <div class="col-md-6">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h5><i class="bi bi-pie-chart-fill me-2 text-danger"></i>Crimes by Type</h5>
+          </div>
+          <div class="p-3">
+            <div *ngFor="let item of stats.crimesByType" class="mb-2">
+              <div class="d-flex justify-content-between mb-1">
+                <span class="fw-semibold" style="font-size:0.85rem">{{ item['type'] }}</span>
+                <span class="badge bg-secondary">{{ item['count'] }}</span>
+              </div>
+              <div class="progress" style="height:8px">
+                <div class="progress-bar bg-danger"
+                     [style.width.%]="(+item['count'] / stats.totalCrimes) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crimes by Status -->
+      <div class="col-md-6">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h5><i class="bi bi-bar-chart-fill me-2 text-primary"></i>Crimes by Status</h5>
+          </div>
+          <div class="p-3">
+            <div *ngFor="let item of stats.crimesByStatus" class="mb-3">
+              <div class="d-flex justify-content-between mb-1">
+                <span>
+                  <span [ngClass]="getStatusClass(item['status'])">{{ item['status'] }}</span>
+                </span>
+                <strong>{{ item['count'] }}</strong>
+              </div>
+              <div class="progress" style="height:10px">
+                <div class="progress-bar"
+                     [class.bg-success]="item['status'] === 'Closed'"
+                     [class.bg-danger]="item['status'] === 'Open'"
+                     [class.bg-warning]="item['status'] === 'Under Investigation'"
+                     [style.width.%]="(+item['count'] / stats.totalCrimes) * 100">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row g-3 mt-1">
+      <div class="col-12">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h5><i class="bi bi-lightning-fill me-2 text-warning"></i>Quick Access — 5 Required Features</h5>
+          </div>
+          <div class="p-3">
+            <div class="row g-2">
+              <div class="col-md-4 col-sm-6">
+                <a routerLink="/court-by-date" class="btn btn-outline-primary w-100 text-start">
+                  <i class="bi bi-calendar-check-fill me-2"></i>
+                  <strong>Feature 1</strong><br>
+                  <small>Suspects by Court Date</small>
+                </a>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <a routerLink="/arrest-stats" class="btn btn-outline-success w-100 text-start">
+                  <i class="bi bi-bar-chart-fill me-2"></i>
+                  <strong>Feature 2</strong><br>
+                  <small>Officer Arrest Stats</small>
+                </a>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <a routerLink="/update-hearing" class="btn btn-outline-warning w-100 text-start">
+                  <i class="bi bi-pencil-square me-2"></i>
+                  <strong>Feature 3</strong><br>
+                  <small>Update Hearing Date</small>
+                </a>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <a routerLink="/add-arrest" class="btn btn-outline-info w-100 text-start">
+                  <i class="bi bi-plus-circle-fill me-2"></i>
+                  <strong>Feature 4</strong><br>
+                  <small>Add New Arrest</small>
+                </a>
+              </div>
+              <div class="col-md-4 col-sm-6">
+                <a routerLink="/remove-suspect" class="btn btn-outline-danger w-100 text-start">
+                  <i class="bi bi-person-x-fill me-2"></i>
+                  <strong>Feature 5</strong><br>
+                  <small>Remove Suspect from Crime</small>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

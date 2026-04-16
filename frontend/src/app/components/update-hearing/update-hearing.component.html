@@ -1,0 +1,75 @@
+<div class="page-header">
+  <h1><i class="bi bi-pencil-square me-2 text-warning"></i>Feature 3 — Update Hearing Date</h1>
+  <p>Change the scheduled hearing date for a particular court case</p>
+</div>
+
+<div class="content-body">
+  <!-- SQL Reference -->
+  <div class="alert alert-light border mb-3" style="font-size:0.8rem">
+    <strong><i class="bi bi-code-slash me-1"></i>SQL Query:</strong>
+    <code class="ms-2">UPDATE sentence SET hearing_date = :date WHERE court_case_no = :caseNo</code>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="feature-card">
+        <h5><i class="bi bi-calendar-event me-2"></i>Update Court Hearing Date</h5>
+
+        <div *ngIf="successMsg" class="alert alert-success">
+          <i class="bi bi-check-circle-fill me-2"></i>{{ successMsg }}
+        </div>
+        <div *ngIf="errorMsg" class="alert alert-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMsg }}
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Court Case Number</label>
+            <input type="number" class="form-control" formControlName="caseNo"
+                   placeholder="e.g. 1008">
+            <div class="form-text">Cases range from 1001 to 1032. Try: 1002, 1008, 1010, 1016</div>
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.get('caseNo')?.invalid && form.get('caseNo')?.touched">
+              Please enter a valid case number.
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold">New Hearing Date</label>
+            <input type="date" class="form-control" formControlName="hearingDate">
+            <div class="invalid-feedback d-block"
+                 *ngIf="form.get('hearingDate')?.invalid && form.get('hearingDate')?.touched">
+              Please select a new hearing date.
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-warning" [disabled]="form.invalid || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            <i class="bi bi-save me-1" *ngIf="!loading"></i>
+            Update Hearing Date
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="col-md-6">
+      <div class="feature-card h-100" style="background:#f8f9fa">
+        <h5><i class="bi bi-info-circle me-2 text-info"></i>How It Works</h5>
+        <p class="text-muted" style="font-size:0.9rem">
+          Enter the court case number and a new hearing date. The system will update the
+          <code>hearing_date</code> field in the <code>sentence</code> table for that specific case.
+        </p>
+        <hr>
+        <p class="fw-semibold mb-1">Sample Case Numbers (Pending):</p>
+        <ul style="font-size:0.875rem">
+          <li><strong>1002</strong> — Identity Fraud, Suspect: Sarah Connor</li>
+          <li><strong>1008</strong> — Harbor Murder, Suspect: Omar Hassan</li>
+          <li><strong>1010</strong> — Drug Raid, Suspect: Carlos Mendoza</li>
+          <li><strong>1016</strong> — Riverside Murder, Suspect: Viktor Kozlov</li>
+          <li><strong>1022</strong> — Ransomware, Suspect: David Brown</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
