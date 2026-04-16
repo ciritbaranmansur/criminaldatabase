@@ -73,6 +73,8 @@ export interface OfficerArrestStatsDTO {
 // Request for Query 4
 export interface AddArrestRequest {
   crimeId: number;
+  officerId: number;
+  suspectId: number;
   arrestDate: string;
   arrestLocation: string;
 }

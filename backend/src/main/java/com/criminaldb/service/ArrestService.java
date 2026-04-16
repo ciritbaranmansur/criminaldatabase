@@ -42,6 +42,7 @@ public class ArrestService {
         }
         if (req.getSuspectId() != null) {
             arrestRepository.insertSuspectArrest(saved.getArrestId(), req.getSuspectId());
+            arrestRepository.insertSuspectCrime(req.getSuspectId(), req.getCrimeId());
         }
 
         return saved;

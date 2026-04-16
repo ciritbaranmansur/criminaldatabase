@@ -20,4 +20,8 @@ public interface ArrestRepository extends JpaRepository<Arrest, Integer> {
     @Modifying
     @Query(value = "INSERT IGNORE INTO SuspectArrest (ArrestId, SuspectId) VALUES (:arrestId, :suspectId)", nativeQuery = true)
     void insertSuspectArrest(@Param("arrestId") Integer arrestId, @Param("suspectId") Integer suspectId);
+
+    @Modifying
+    @Query(value = "INSERT IGNORE INTO SuspectCrime (SuspectId, CrimeId) VALUES (:suspectId, :crimeId)", nativeQuery = true)
+    void insertSuspectCrime(@Param("suspectId") Integer suspectId, @Param("crimeId") Integer crimeId);
 }

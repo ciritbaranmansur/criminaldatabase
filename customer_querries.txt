@@ -1,0 +1,77 @@
+-- ============================================================
+-- CUSTOMER QUERIES (5 UI Features)
+-- CSE 204 - Criminal DB Project
+-- ============================================================
+
+
+-- ---------------------------------------------------------------
+-- QUERY 1: Court by Date
+-- All suspects and crime info appearing in court on a certain date
+-- Parameterize: replace '2024-07-15' with the desired date
+-- ---------------------------------------------------------------
+SELECT
+    sn.court_case_no,
+    sn.hearing_date,
+    s.suspect_id,
+    s.first_name,
+    s.last_name,
+    s.gender,
+    c.crime_id,
+    c.crime_type,
+    c.crime_date,
+    c.city,
+    c.description,
+    sn.verdict,
+    sn.sentence_type
+FROM sentence sn
+JOIN crime c   ON sn.crime_id   = c.crime_id
+JOIN suspect s ON sn.suspect_id = s.suspect_id
+WHERE sn.hearing_date = '2024-07-15'
+ORDER BY sn.court_case_no;
+
+
+-- ---------------------------------------------------------------
+-- QUERY 2: Arrest Statistics
+-- Officers and how many suspects of each gender were arrested by each officer
+-- ---------------------------------------------------------------
+SELECT
+    o.officer_id,
+    CONCAT(o.first_name, ' ', o.last_name) AS officer_name,
+    r.rank_name,
+    SUM(CASE WHEN s.gender = 'M' THEN 1 ELSE 0 END) AS male_arrests,
+    SUM(CASE WHEN s.gender = 'F' THEN 1 ELSE 0 END) AS female_arrests,
+    COUNT(*) AS total_arrests
+FROM arrest a
+JOIN officer o      ON a.arresting_officer_id = o.officer_id
+JOIN suspect s      ON a.suspect_id = s.suspect_id
+JOIN officer_rank r ON o.rank_id = r.rank_id
+GROUP BY o.officer_id, o.first_name, o.last_name, r.rank_name
+ORDER BY total_arrests DESC;
+
+
+-- ---------------------------------------------------------------
+-- QUERY 3: Update Hearing Date
+-- Change the hearing date for a particular court case
+-- Parameterize: replace 1008 with the court_case_no, and '2024-04-20' with the new date
+-- ---------------------------------------------------------------
+UPDATE sentence
+SET hearing_date = '2024-04-20'
+WHERE court_case_no = 1008;
+
+
+-- ---------------------------------------------------------------
+-- QUERY 4: Add Arrest
+-- Add a new arrest record for a suspect
+-- Parameterize: arrest_id, crime_id, suspect_id, arresting_officer_id, arrest_date, arrest_location
+-- ---------------------------------------------------------------
+INSERT INTO arrest (arrest_id, crime_id, suspect_id, arresting_officer_id, arrest_date, arrest_location)
+VALUES (34, 28, 22, 4, '2024-08-10', 'Stockholm Police Station');
+
+
+-- ---------------------------------------------------------------
+-- QUERY 5: Remove Suspect
+-- Remove a suspect from a crime (e.g., cleared / wrongly accused)
+-- Parameterize: replace crime_id = 8 and suspect_id = 13 with the actual values
+-- ---------------------------------------------------------------
+DELETE FROM crime_suspect
+WHERE crime_id = 8 AND suspect_id = 13;
